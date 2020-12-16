@@ -45,4 +45,11 @@ class  AdresseTest extends KernelTestCase
         $adresse = $this->getAdresseRdv(50, 'rue inconnu', 60000, 'ville');
         $this->assertEquals('ville', $adresse->getVille(), 'erreur: testSetterGetterNumRue');
     }
+
+    public function testErreur()
+    {
+        $adresse = $this->getAdresseRdv(50, 'rue inconnu', 60000, 'ville');
+        $erreur = $this->validator->validate($adresse);
+        $this->assertCount(0, $erreur, 'erreur: testErreur()');
+    }
 }

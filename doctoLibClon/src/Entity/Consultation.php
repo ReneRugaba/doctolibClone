@@ -20,9 +20,19 @@ class Consultation
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\Type("object")
+     * @Assert\Date(message="date non conforme!")
      */
     private $dateRdv;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Practicien::class, inversedBy="consultation")
+     */
+    private $practicien;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Patient::class, inversedBy="consultations")
+     */
+    private $patient;
 
     public function getId(): ?int
     {
@@ -37,6 +47,30 @@ class Consultation
     public function setDateRdv(\DateTimeInterface $dateRdv): self
     {
         $this->dateRdv = $dateRdv;
+
+        return $this;
+    }
+
+    public function getPracticien(): ?Practicien
+    {
+        return $this->practicien;
+    }
+
+    public function setPracticien(?Practicien $practicien): self
+    {
+        $this->practicien = $practicien;
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patient $patient): self
+    {
+        $this->patient = $patient;
 
         return $this;
     }

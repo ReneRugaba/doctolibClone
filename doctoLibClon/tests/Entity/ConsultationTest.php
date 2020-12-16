@@ -26,11 +26,4 @@ class ConsultationTest extends KernelTestCase
     {
         return (new Consultation())->setDateRdv(new \DateTime($date));
     }
-
-    // public function testErreurDate()
-    // {
-    //     $date = $this->getDateRdv('2020/16');
-    //     $erreur = $this->validator->validate($date);
-    //     $this->assertCount(0, $erreur[0]->getMessage(), 'erreur: TestErreurDate');
-    // }
 }

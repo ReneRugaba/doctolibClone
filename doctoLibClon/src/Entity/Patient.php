@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PatientRepository;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -46,6 +48,27 @@ class Patient
      * )
      */
     private $email;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Practicien::class, inversedBy="Patient")
+     */
+    private $practicien;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Adresse::class)
+     */
+    private $adresse;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Consultation::class, mappedBy="patient")
+     */
+    private $consultations;
+
+    public function __construct()
+    {
+        $this->practicien = new ArrayCollection();
+        $this->consultations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,6 +119,72 @@ class Patient
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Practicien[]
+     */
+    public function getPracticien(): Collection
+    {
+        return $this->practicien;
+    }
+
+    public function addPracticien(Practicien $practicien): self
+    {
+        if (!$this->practicien->contains($practicien)) {
+            $this->practicien[] = $practicien;
+        }
+
+        return $this;
+    }
+
+    public function removePracticien(Practicien $practicien): self
+    {
+        $this->practicien->removeElement($practicien);
+
+        return $this;
+    }
+
+    public function getAdresse(): ?Adresse
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?Adresse $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Consultation[]
+     */
+    public function getConsultations(): Collection
+    {
+        return $this->consultations;
+    }
+
+    public function addConsultation(Consultation $consultation): self
+    {
+        if (!$this->consultations->contains($consultation)) {
+            $this->consultations[] = $consultation;
+            $consultation->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsultation(Consultation $consultation): self
+    {
+        if ($this->consultations->removeElement($consultation)) {
+            // set the owning side to null (unless already changed)
+            if ($consultation->getPatient() === $this) {
+                $consultation->setPatient(null);
+            }
+        }
 
         return $this;
     }
