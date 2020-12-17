@@ -2,7 +2,10 @@
 
 namespace App\tests\Entity;
 
+use App\Entity\Adresse;
+use App\Entity\Consultation;
 use App\Entity\Patient;
+use App\Entity\Practicien;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PatientTest extends KernelTestCase
@@ -73,5 +76,28 @@ class PatientTest extends KernelTestCase
         $patien = $this->getPatient("NomFamille", "prenom", "2020/12/16", "email.com");
         $error = $this->validator->validate($patien);
         $this->assertEquals("Votre email n'est pas valide!", $error[0]->getMessage(), "error: messageErreur");
+    }
+
+    public function testAddGetRemoveConsultationPatient()
+    {
+        $patien = $this->getPatient("NomFamille", "prenom", "2020/12/16", "email.com");
+        $adresse = (new Adresse())->setNumRue(25)->setRue('rue de la rue')->setCodePostal(15260)->setVille('ville');
+        $practicien = (new Practicien())->setNom('DAVID')->setPrenom('Dev')->setEmail('e.b@d.c')->setAdresse($adresse);
+        $rdvConsult = (new Consultation())->setDateRdv(new \DateTime('2020/12/20'))->setPracticien($practicien)->setPatient($patien);
+        $patien->addConsultation($rdvConsult);
+        $this->assertCount(1, $patien->getConsultations());
+        $patien->removeConsultation($rdvConsult);
+        $this->assertCount(0, $patien->getConsultations());
+    }
+
+    public function testAddGetRemovePracticienPatient()
+    {
+        $patien = $this->getPatient("NomFamille", "prenom", "2020/12/16", "email.com");
+        $adresse = (new Adresse())->setNumRue(25)->setRue('rue de la rue')->setCodePostal(15260)->setVille('ville');
+        $practicien = (new Practicien())->setNom('DAVID')->setPrenom('Dev')->setEmail('e.b@d.c')->setAdresse($adresse);
+        $patien->addPracticien($practicien);
+        $this->assertCount(1, $patien->getPracticien());
+        $patien->removePracticien($practicien);
+        $this->assertCount(0, $patien->getPracticien());
     }
 }
