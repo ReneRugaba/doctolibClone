@@ -89,7 +89,7 @@ class PracticienTest extends KernelTestCase
         $practicien = $this->getPracticien("NomFamille", "prenom", "2020/12/16", "email.com");
         $adresse = (new Adresse())->setNumRue(25)->setRue('rue de la rue')->setCodePostal(15260)->setVille('ville');
         $patient = (new Patient())->setNom('DAVID')->setPrenom('Dev')->setEmail('e.b@d.c')->setAdresse($adresse);
-        // $rdvConsult = (new Consultation())->setDateRdv(new \DateTime('2020/12/20'))->setPracticien($practicien)->setPatient($patient);
+
         $practicien->addPatient($patient);
         $this->assertCount(1, $practicien->getPatient());
         $practicien->removePatient($patient);
