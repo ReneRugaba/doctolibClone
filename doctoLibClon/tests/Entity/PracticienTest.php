@@ -2,7 +2,10 @@
 
 namespace App\tests\Entity;
 
+use App\Entity\Adresse;
 use App\Entity\Practicien;
+use App\Entity\Consultation;
+use App\Entity\Patient;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PracticienTest extends KernelTestCase
@@ -67,5 +70,29 @@ class PracticienTest extends KernelTestCase
         $practicien = $this->getPracticien("NomFamille", "prenom", "email.com");
         $error = $this->validator->validate($practicien);
         $this->assertEquals("Votre email n'est pas valide!", $error[0]->getMessage(), "error: messageErreur");
+    }
+
+    public function testAddGetRemoveConsultationPracticien()
+    {
+        $practicien = $this->getPracticien("NomFamille", "prenom", "2020/12/16", "email.com");
+        $adresse = (new Adresse())->setNumRue(25)->setRue('rue de la rue')->setCodePostal(15260)->setVille('ville');
+        $patient = (new Patient())->setNom('DAVID')->setPrenom('Dev')->setEmail('e.b@d.c')->setAdresse($adresse);
+        $rdvConsult = (new Consultation())->setDateRdv(new \DateTime('2020/12/20'))->setPracticien($practicien)->setPatient($patient);
+        $practicien->addConsultation($rdvConsult);
+        $this->assertCount(1, $practicien->getConsultation());
+        $practicien->removeConsultation($rdvConsult);
+        $this->assertCount(0, $practicien->getConsultation());
+    }
+
+    public function testAddGetRemovePatientPracticien()
+    {
+        $practicien = $this->getPracticien("NomFamille", "prenom", "2020/12/16", "email.com");
+        $adresse = (new Adresse())->setNumRue(25)->setRue('rue de la rue')->setCodePostal(15260)->setVille('ville');
+        $patient = (new Patient())->setNom('DAVID')->setPrenom('Dev')->setEmail('e.b@d.c')->setAdresse($adresse);
+        // $rdvConsult = (new Consultation())->setDateRdv(new \DateTime('2020/12/20'))->setPracticien($practicien)->setPatient($patient);
+        $practicien->addPatient($patient);
+        $this->assertCount(1, $practicien->getPatient());
+        $practicien->removePatient($patient);
+        $this->assertCount(0, $practicien->getConsultation());
     }
 }
