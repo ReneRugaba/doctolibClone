@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PracticienRepository;
+use App\Security\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=PracticienRepository::class)
  */
-class Practicien
+class Practicien extends User
 {
     /**
      * @ORM\Id
@@ -31,15 +32,6 @@ class Practicien
      * @Assert\NotBlank(message="le prenom ne peux être vide!")
      */
     private $prenom;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     * @Assert\Regex(
-     * pattern="/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/",
-     * message="Votre email n'est pas valide!"
-     * )
-     */
-    private $email;
 
     /**
      * @ORM\ManyToMany(targetEntity=Patient::class, mappedBy="practicien")
@@ -94,18 +86,6 @@ class Practicien
     public function setPrenom(?string $prenom): self
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(?string $email): self
-    {
-        $this->email = $email;
 
         return $this;
     }

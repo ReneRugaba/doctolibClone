@@ -44,9 +44,9 @@ class PatientTest extends KernelTestCase
         $this->assertEquals("e@mail.com", $patient->getEmail(), "erreur: testGetterSetterEmail");
     }
 
-    protected function getPatient($nom = null, $prenom = null, $dateNaissance = null, $email = null)
+    protected function getPatient($nom = null, $prenom = null, $dateNaissance = null, $email = null, $password = null)
     {
-        return (new Patient())->setNom($nom)->setPrenom($prenom)->setDateNaissance(new \DateTime($dateNaissance))->setEmail($email);
+        return (new Patient())->setNom($nom)->setPrenom($prenom)->setDateNaissance(new \DateTime($dateNaissance))->setEmail($email)->setPassword($password);
     }
 
 

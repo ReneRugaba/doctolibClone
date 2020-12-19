@@ -12,7 +12,7 @@ class PatientFixtures extends Fixture
     {
         for ($i = 1; $i <= 5; $i++) {
             $patient = (new Patient())->setNom("DAVID$i")->setPrenom("DAVID$i")->setPassword("12345$i")
-                ->setDateNaissance(new \DateTime("2020/01/2$i"))->setEmail("e.d@C.E");
+                ->setDateNaissance(new \DateTime("2020/01/2$i"))->setEmail("e.d@C.E")->setPassword("12345$i");
             $manager->persist($patient);
         }
 

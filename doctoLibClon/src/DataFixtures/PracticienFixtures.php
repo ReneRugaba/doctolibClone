@@ -16,7 +16,7 @@ class PracticienFixtures extends Fixture
             $adresse = (new Adresse())->setNumRue(25)->setRue('rue de la rue')->setCodePostal(15260)->setVille('ville');
 
             $specialite = (new Specialite())->setSpecialite('generaliste');
-            $practicien = (new Practicien())->setNom("DAVID$i")->setPrenom("DAVID$i")->setEmail('e.b@d.c')->setAdresse($adresse)->setSpecialite($specialite);
+            $practicien = (new Practicien())->setNom("DAVID$i")->setPrenom("DAVID$i")->setEmail('e.b@d.c')->setAdresse($adresse)->setSpecialite($specialite)->setPassword("12345$i");
             $manager->persist($practicien);
             $manager->persist($specialite);
             $manager->persist($adresse);
