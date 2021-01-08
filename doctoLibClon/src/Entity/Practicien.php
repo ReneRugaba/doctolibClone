@@ -50,7 +50,7 @@ class Practicien extends User
     private $consultation;
 
     /**
-     * @ORM\OneToOne(targetEntity=Specialite::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Specialite::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $specialite;
@@ -71,7 +71,7 @@ class Practicien extends User
         return $this->nom;
     }
 
-    public function setNom(?string $nom): self
+    public function setNom(?string $nom): ?self
     {
         $this->nom = $nom;
 
@@ -159,7 +159,7 @@ class Practicien extends User
         return $this;
     }
 
-    public function getSpecialite(): ?Specialite
+    public function getSpecialite(): Specialite
     {
         return $this->specialite;
     }
@@ -167,6 +167,18 @@ class Practicien extends User
     public function setSpecialite(Specialite $specialite): self
     {
         $this->specialite = $specialite;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */
+    public function setId(?int $id): ?self
+    {
+        $this->id = $id;
 
         return $this;
     }

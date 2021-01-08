@@ -40,7 +40,7 @@ class PatientTest extends KernelTestCase
 
     public function testGetterSetterEmail()
     {
-        $patient = $this->getPatient("NomFamille", "Prenom", "2020/12/16", "e@mail.com");
+        $patient = $this->getPatient("NomFamille", "Prenom", "2020/12/16", "e@mail.com","123456");
         $this->assertEquals("e@mail.com", $patient->getEmail(), "erreur: testGetterSetterEmail");
     }
 
