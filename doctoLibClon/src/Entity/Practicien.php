@@ -50,7 +50,7 @@ class Practicien extends User
     private $consultation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Specialite::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Specialite::class, cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $specialite;

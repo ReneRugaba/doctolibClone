@@ -3,14 +3,14 @@
 namespace App\Mapped;
 
 use App\DTO\PracticienDto;
+use App\Entity\Adresse;
 use App\Entity\Practicien;
+use App\Entity\Specialite;
 use App\Repository\AdresseRepository;
 use App\Repository\SpecialiteRepository;
 
 class PracticienMapped
 {
-    private $AdresseRepository;
-    private $specialiterepository;
 
     public function __construct(AdresseRepository $AdresseRepository, SpecialiteRepository $specialiterepository)
     {
@@ -24,17 +24,18 @@ class PracticienMapped
         $practicienDto = (new PracticienDto())->setId($practien->getId())->setNom($practien->getNom())
             ->setPrenom($practien->getPrenom())->setPatient($practien->getPatient())->setIdAdresse($practien->getAdresse()->getId())
             ->setConsultation($practien->getConsultation())->setSpecialite($practien->getSpecialite()->getId())
-            ->setUsername($practien->getUsername())->setPassword($practien->getPassword());
+            ->setUsername($practien->getUsername());
 
         return $practicienDto;
     }
 
     // cette fonction transforme l'objets PractiuenDto en Practicien
-    public function transformPracticienDtoToPracticien(Practicien $practicien, PracticienDto $practicienDto): Practicien
-    {
-        // ici je recupère deux objets des class Specialite et Adresse en passant par le repository
-        $adresse = $this->AdresseRepository->find($practicienDto->getIdAdresse());
-        $specialite = $this->specialiterepository->find($practicienDto->getSpecialite());
+    public function transformPracticienDtoToPracticien(
+        Practicien $practicien,
+        PracticienDto $practicienDto,
+        Adresse $adresse = null,
+        Specialite $specialite = null
+    ): Practicien {
 
         // ici je crée un nouveau practicien
         $practicien->setId($practicienDto->getId())->setNom($practicienDto->getNom())
