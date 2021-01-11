@@ -54,7 +54,7 @@ class Patient extends User
 
 
     /**
-     * @ORM\OneToMany(targetEntity=Consultation::class, mappedBy="patient")
+     * @ORM\OneToMany(targetEntity=Consultation::class, mappedBy="patient",cascade={"persist"})
      */
     private $consultations;
 

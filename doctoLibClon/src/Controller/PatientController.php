@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\DTO\ConsultationDto;
 use App\DTO\PatientDto;
+use App\DTO\PracticienDto;
+use App\Entity\Consultation;
 use App\Entity\Patient;
+use App\Entity\Practicien;
 use FOS\RestBundle\View\View;
 use App\Service\PatientService;
 use App\Service\Exception\ServiceException;
@@ -21,6 +25,8 @@ class PatientController extends AbstractFOSRestController
 
     const URI_PATIENT_COLLECTION = "/patients";
     const URI_PATIENT_INSTANCE = "/patients/{id}";
+    const URI_PATIENT_ADD_INSTANCE = "/patients/add_consultation";
+    const URI_PATIENT_CHOW_INSTANCE = "/patients/consultation";
 
     public function __construct(PatientService $patienService)
     {
@@ -67,14 +73,16 @@ class PatientController extends AbstractFOSRestController
      * @Paramconverter("patientDto",converter="fos_rest.request_body")
      * @return void
      */
-    public function updatePatient(Patient $patient, PatientDto $patientDto)
+    public function updatePatient(Patient $patient, PatientDto $patientDto) //ici je recupère le Post
+    //que je converti en PatientDto et grâce au paramètre de id de URI je recupère le patient à modifier dans ma bdd
     {
-        try {
+        try { //ici je passe en argu mes para ci-dessus à la methode persist de ma couche service
             $this->patientService->persist($patient, $patientDto);
-        } catch (ServiceException $e) {
+        } catch (ServiceException $e) { //dans le cas ou une exception est emise j'expose celle-ci en json
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => ""]);
         }
-        return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]);
+        return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]); //si l'opération s'est fait
+        //sans problèmes je retourne une réponse http 200 en json
     }
 
     /**
@@ -84,8 +92,25 @@ class PatientController extends AbstractFOSRestController
      */
     public function removePatient(Patient $patient) //cette methode va supprimer un patient choisi
     {
-        try {
+        try { //ici je passe en argu mon para ci-dessus à la methode removePatient de ma couche service
             $this->patientService->removePatient($patient);
+        } catch (ServiceException $e) { //dans le cas ou une exception est emise j'expose celle-ci en json
+            return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
+        }
+        return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]); //si l'opération s'est fait
+        //sans problèmes je retourne une réponse http 200 en json
+    }
+
+
+    /**
+     * @Post(PatientController::URI_PATIENT_ADD_INSTANCE)
+     * @ParamConverter("consultationDto",converter="fos_rest.request_body")
+     * @return void
+     */
+    public function addRdv(ConsultationDto $consultationDto)
+    {
+        try {
+            $this->patientService->addRdvConsult($consultationDto);
         } catch (ServiceException $e) {
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
         }
