@@ -6,17 +6,56 @@ use App\Entity\Adresse;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\schema()
+ */
 class PatientDto
 {
+    /**
+     * @OA\Property(type="integer")
+     *
+     * @var int
+     */
     private $id;
+
+    /**
+     * @OA\Property(type="string")
+     *
+     * @var string
+     */
     private $nom;
+
+    /**
+     * @OA\Property(type="string")
+     *
+     * @var string
+     */
     private $prenom;
+
+    /**
+     * @OA\Property(type="string")
+     *
+     * @var string
+     */
     private $dateNaissance;
+
+    /**
+     * @OA\Property(type="string")
+     *
+     * @var string
+     */
     private $email;
-    private $practicien;
+
+
+    /**
+     * @OA\Property(type="integer")
+     *
+     * @var int
+     */
     private $adresse;
-    private $password;
+
 
     /**
      * Get the value of id
@@ -98,25 +137,6 @@ class PatientDto
         return $this;
     }
 
-    /**
-     * Get the value of practicien
-     */
-    public function getPracticien(): ?collection
-    {
-        return $this->practicien;
-    }
-
-    /**
-     * Set the value of practicien
-     *
-     * @return  self
-     */
-    public function setPracticien(?collection $practicien): ?self
-    {
-        $this->practicien = $practicien;
-
-        return $this;
-    }
 
     /**
      * Get the value of adresse
@@ -138,25 +158,6 @@ class PatientDto
         return $this;
     }
 
-    /**
-     * Get the value of password
-     */
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set the value of password
-     *
-     * @return  self
-     */
-    public function setPassword(?string $password): ?self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
 
     /**
      * Get the value of email

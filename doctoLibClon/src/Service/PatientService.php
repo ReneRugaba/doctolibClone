@@ -13,6 +13,7 @@ use App\Repository\PracticienRepository;
 use Doctrine\DBAL\Driver\PDO\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Exception\ServiceException;
+use Symfony\Component\HttpFoundation\Request;
 
 class PatientService
 {
@@ -41,18 +42,16 @@ class PatientService
     }
 
 
-    public function searchAll() //cette methode me permet de chercher tous les patient de ma bdd
+    public function searchPatient(array $array) //cette methode me permet de chercher tous les patient de ma bdd
     {
         try { //jerecupère les patients present dans ma bdd dans un tableau $patiens
-            $patients = $this->patientRepository->findAll();
-            $patientsDtos = []; //j'initialise un tableau vide pour contenir mes patientDto
+            $patient = $this->patientRepository->findOneBy($array);
         } catch (Exception $e) { //je 
             throw new ServiceException($e->getMessage());
         }
-        foreach ($patients as  $value) { //je fais un foreach pour transformet mes patient en patientDto
-            $patientsDtos[] = $this->patientMapped->transformPatientToPatientDto($value);
-        }
-        return $patientsDtos; //je retourne le tableau de mes patientDto
+
+        $patientDto = $this->patientMapped->transformPatientToPatientDto($patient);
+        return $patientDto; //je retourne le tableau de mes patientDto
     }
 
     public function persist($patient, $patientDto) //cette methode me permet de créer et de modifier mon Patient

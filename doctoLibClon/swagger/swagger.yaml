@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  title: 'Patient Management'
+  description: 'Patient Management'
+  version: V1
+paths:
+  '/patients/type?type=champ':
+    get:
+      tags:
+        - patient
+      summary: 'Find one Patient'
+      description: 'Returns one Patient'
+      operationId: searchPatient
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientDto'
+        '500':
+          description: 'Contact us, for this response'
+        '404':
+          description: 'Patients not found'
+components:
+  schemas:
+    PatientDto:
+      properties:
+        id:
+          type: integer
+        nom:
+          type: string
+        prenom:
+          type: string
+        dateNaissance:
+          type: string
+        email:
+          type: string
+        adresse:
+          type: integer
+      type: object

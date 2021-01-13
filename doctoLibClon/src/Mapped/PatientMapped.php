@@ -19,7 +19,7 @@ class PatientMapped
     {
         $patientDto = $this->patientDto->setId($patient->getId())->setNom($patient->getNom())
             ->setPrenom($patient->getPrenom())->setDateNaissance($patient->getDateNaissance()->format("d-m-Y"))
-            ->setPracticien($patient->getPracticien())->setAdresse($patient->getAdresse()->getId())->setEmail($patient->getEmail());
+            ->setAdresse($patient->getAdresse()->getId())->setEmail($patient->getEmail());
         return $patientDto;
     }
 
@@ -27,7 +27,7 @@ class PatientMapped
     {
         $patient->setNom($patientDto->getNom())->setPrenom($patientDto->getPrenom())
             ->setAdresse($adresse)->setDateNaissance(new DateTime($patientDto->getDateNaissance()))
-            ->setEmail($patientDto->getEmail())->setPassword($patientDto->getPassword());
+            ->setEmail($patientDto->getEmail());
         return $patient;
     }
 }
