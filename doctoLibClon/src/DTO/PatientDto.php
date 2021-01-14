@@ -16,35 +16,35 @@ class PatientDto
     /**
      * @OA\Property(type="integer")
      *
-     * @var int
+     * @var integer|null
      */
     private $id;
 
     /**
      * @OA\Property(type="string")
      *
-     * @var string
+     * @var string|null
      */
     private $nom;
 
     /**
      * @OA\Property(type="string")
      *
-     * @var string
+     * @var string|null
      */
     private $prenom;
 
     /**
      * @OA\Property(type="string")
      *
-     * @var string
+     * @var string|null
      */
     private $dateNaissance;
 
     /**
      * @OA\Property(type="string")
      *
-     * @var string
+     * @var string|null
      */
     private $email;
 
@@ -52,10 +52,11 @@ class PatientDto
     /**
      * @OA\Property(type="integer")
      *
-     * @var int
+     * @var int|null
      */
     private $adresse;
 
+    private $password;
 
     /**
      * Get the value of id
@@ -175,6 +176,26 @@ class PatientDto
     public function setEmail(?string $email): ?self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of password
+     */
+    public function getPasswod(): ?string
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the value of password
+     *
+     * @return  self
+     */
+    public function setPasswod(?string $password): ?self
+    {
+        $this->password = $password;
 
         return $this;
     }

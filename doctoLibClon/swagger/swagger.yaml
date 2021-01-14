@@ -4,13 +4,119 @@ info:
   description: 'Patient Management'
   version: V1
 paths:
-  '/patients/type?type=champ':
+  /patients:
     get:
       tags:
         - patient
       summary: 'Find one Patient'
       description: 'Returns one Patient'
       operationId: searchPatient
+      parameters:
+        -
+          name: nom
+          in: query
+          description: 'Status values that needed to be considered for filter'
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            default: available
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientDto'
+        '500':
+          description: 'Contact us, for this response'
+        '404':
+          description: 'Patients not found'
+    post:
+      tags:
+        - patient
+      summary: 'create Patient'
+      description: 'create Patient'
+      operationId: createPatient
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientDto'
+        '500':
+          description: 'Contact us, for this response'
+  '/patients/{id}':
+    put:
+      tags:
+        - patient
+      summary: 'update Patient'
+      description: 'update Patient'
+      operationId: updatePatient
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'id of patient to return'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientDto'
+        '500':
+          description: 'Contact us, for this response'
+        '404':
+          description: 'Patients not found'
+    post:
+      tags:
+        - patient
+      summary: 'add meeting Patient'
+      description: 'add meeting Patient'
+      operationId: addRdv
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'id of patient to return'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientDto'
+        '500':
+          description: 'Contact us, for this response'
+        '404':
+          description: 'Patients not found'
+    delete:
+      tags:
+        - patient
+      summary: 'delete Patient'
+      description: 'delete Patient'
+      operationId: removePatient
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'id of patient to return'
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: 'successful operation'

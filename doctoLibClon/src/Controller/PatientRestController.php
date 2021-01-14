@@ -30,7 +30,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  *      title="Patient Management"
  * )
  */
-class PatientController extends AbstractFOSRestController
+class PatientRestController extends AbstractFOSRestController
 {
     private $patientService;
     const URI_PATIENT_COLLECTION = "/patients";
@@ -47,7 +47,7 @@ class PatientController extends AbstractFOSRestController
     /**
      * @QueryParam(name="nom",requirements="\w+",description="name patient")
      * @OA\Get(
-     *     path="/patients/type?nom=champ",
+     *     path="/patients",
      *     summary="Find one Patient",
      *     description="Returns one Patient",
      *     operationId="searchPatient",
@@ -64,6 +64,19 @@ class PatientController extends AbstractFOSRestController
      *     @OA\Response(
      *         response="404",
      *         description="Patients not found"
+     *     ), @OA\Parameter(
+     *         name="nom",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             type="array",
+     *             default="available",
+     *             @OA\Items(
+     *                 type="string"
+     *             )
+     *         )
      *     )
      * )
      * @Get(PatientController::URI_PATIENT_COLLECTION)
@@ -83,7 +96,22 @@ class PatientController extends AbstractFOSRestController
     }
 
     /**
-     * 
+     * @OA\Post(
+     *     path="/patients",
+     *     summary="create Patient",
+     *     description="create Patient",
+     *     operationId="createPatient",
+     *     tags={"patient"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PatientDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     )
+     * )
      * @Post(PatientController::URI_PATIENT_COLLECTION)
      * @ParamConverter("patientDto",converter="fos_rest.request_body")
      * @return View
@@ -93,7 +121,7 @@ class PatientController extends AbstractFOSRestController
         try { //ici je fait appel à la methode persist de ma class 
             // PatientService pour persist en lui donnant une instance de patient et PatientDto
             $this->patientService->persist(new Patient, $patientDto);
-        } catch (ServiceException $e) { //dans le cas ou une erreur se produit coté srveur je retourne l'exception
+        } catch (ServiceException $e) { //dans le cas ou une erreur se produit coté serveur je retourne l'exception
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
         }
         return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]); //je retourne le resultat du Post en retournant une repnse http 200
@@ -101,6 +129,36 @@ class PatientController extends AbstractFOSRestController
 
 
     /**
+     * @OA\Put(
+     *     path="/patients/{id}",
+     *     summary="update Patient",
+     *     description="update Patient",
+     *     operationId="updatePatient",
+     *     tags={"patient"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PatientDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     ),
+     *      @OA\Response(
+     *         response="404",
+     *         description="Patients not found"
+     *     ),
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id of patient to return",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     )
+     * )
      * @Put(PatientController::URI_PATIENT_INSTANCE)
      * @Paramconverter("patientDto",converter="fos_rest.request_body")
      * @return void
@@ -118,6 +176,36 @@ class PatientController extends AbstractFOSRestController
     }
 
     /**
+     * @OA\Delete(
+     *     path="/patients/{id}",
+     *     summary="delete Patient",
+     *     description="delete Patient",
+     *     operationId="removePatient",
+     *     tags={"patient"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PatientDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     ),
+     *      @OA\Response(
+     *         response="404",
+     *         description="Patients not found"
+     *     ),
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id of patient to return",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     )
+     * )
      * @Delete(PatientController::URI_PATIENT_INSTANCE)
      * 
      * @return void
@@ -135,6 +223,36 @@ class PatientController extends AbstractFOSRestController
 
 
     /**
+     * @OA\Post(
+     *     path="/patients/{id}",
+     *     summary="add meeting Patient",
+     *     description="add meeting Patient",
+     *     operationId="addRdv",
+     *     tags={"patient"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PatientDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     ),
+     *      @OA\Response(
+     *         response="404",
+     *         description="Patients not found"
+     *     ),
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id of patient to return",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     )
+     * )
      * @Post(PatientController::URI_PATIENT_ADD_INSTANCE)
      * @ParamConverter("consultationDto",converter="fos_rest.request_body")
      * @return void
