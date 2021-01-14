@@ -79,7 +79,7 @@ class PatientRestController extends AbstractFOSRestController
      *         )
      *     )
      * )
-     * @Get(PatientController::URI_PATIENT_COLLECTION)
+     * @Get(PatientRestController::URI_PATIENT_COLLECTION)
      */
     public function searchPatient(ParamFetcher $request) //cette methode retourne tout les patient de ma base de donnée
     {
@@ -112,7 +112,7 @@ class PatientRestController extends AbstractFOSRestController
      *         description="Contact us, for this response"
      *     )
      * )
-     * @Post(PatientController::URI_PATIENT_COLLECTION)
+     * @Post(PatientRestController::URI_PATIENT_COLLECTION)
      * @ParamConverter("patientDto",converter="fos_rest.request_body")
      * @return View
      */
@@ -159,7 +159,7 @@ class PatientRestController extends AbstractFOSRestController
      *         )
      *     )
      * )
-     * @Put(PatientController::URI_PATIENT_INSTANCE)
+     * @Put(PatientRestController::URI_PATIENT_INSTANCE)
      * @Paramconverter("patientDto",converter="fos_rest.request_body")
      * @return void
      */
@@ -206,7 +206,7 @@ class PatientRestController extends AbstractFOSRestController
      *         )
      *     )
      * )
-     * @Delete(PatientController::URI_PATIENT_INSTANCE)
+     * @Delete(PatientRestController::URI_PATIENT_INSTANCE)
      * 
      * @return void
      */
@@ -253,7 +253,7 @@ class PatientRestController extends AbstractFOSRestController
      *         )
      *     )
      * )
-     * @Post(PatientController::URI_PATIENT_ADD_INSTANCE)
+     * @Post(PatientRestController::URI_PATIENT_ADD_INSTANCE)
      * @ParamConverter("consultationDto",converter="fos_rest.request_body")
      * @return void
      */
