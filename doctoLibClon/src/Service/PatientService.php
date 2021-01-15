@@ -92,4 +92,28 @@ class PatientService
             throw new ServiceException($e->getMessage());
         }
     }
+
+    public function removeConsultation(Consultation $consultation)
+    {
+        try {
+            $this->manager->remove($consultation);
+            $this->manager->flush();
+        } catch (Exception $e) {
+            throw new ServiceException($e->getMessage());
+        }
+    }
+
+    public function showConsultation(Patient $patient)
+    {
+        try {
+            $consultationArray = $patient->getConsultations();
+            $consultationArrayDto = [];
+            foreach ($consultationArray as $value) {
+                $consultationArrayDto[] = $this->consultationMapped->transformeConsultationToConsultationDto(new ConsultationDto, $value);
+            }
+        } catch (Exception $e) {
+            throw new ServiceException($e->getMessage());
+        }
+        return $consultationArrayDto;
+    }
 }

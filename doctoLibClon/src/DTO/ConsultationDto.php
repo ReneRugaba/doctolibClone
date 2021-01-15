@@ -2,11 +2,39 @@
 
 namespace App\DTO;
 
+use OpenApi\Annotations as OA;
+
+/**
+ * @OA\schema()
+ */
 class ConsultationDto
 {
+    /**
+     * @OA\Property(type="integer")
+     *
+     * @var integer|null
+     */
     private $id;
+
+    /**
+     * @OA\Property(type="string")
+     *
+     * @var string
+     */
     private $dateRdv;
+
+    /**
+     * @OA\Property(type="integer")
+     *
+     * @var integer
+     */
     private $patient;
+
+    /**
+     * @OA\Property(type="integer")
+     *
+     * @var integer
+     */
     private $practicien;
 
     /**

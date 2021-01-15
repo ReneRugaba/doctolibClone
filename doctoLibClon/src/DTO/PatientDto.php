@@ -2,10 +2,9 @@
 
 namespace App\DTO;
 
-use App\Entity\Adresse;
+
 use DateTime;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
+
 use OpenApi\Annotations as OA;
 
 /**

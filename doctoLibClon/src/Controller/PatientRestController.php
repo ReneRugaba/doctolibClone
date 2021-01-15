@@ -35,8 +35,10 @@ class PatientRestController extends AbstractFOSRestController
     private $patientService;
     const URI_PATIENT_COLLECTION = "/patients";
     const URI_PATIENT_INSTANCE = "/patients/{id}";
-    const URI_PATIENT_ADD_INSTANCE = "/patients/add_consultation";
-    const URI_PATIENT_CHOW_INSTANCE = "/patients/consultation";
+    const URI_PATIENT_ADD_INSTANCE = "/patients/consultations";
+    const URI_PATIENT_DELETE_INSTANCE = "/patients/consultations/{id}";
+    const URI_PATIENT_SHOW_INSTANCE = "/patients/{id}/consultations";
+
 
     public function __construct(PatientService $patienService)
     {
@@ -45,7 +47,7 @@ class PatientRestController extends AbstractFOSRestController
 
 
     /**
-     * @QueryParam(name="nom",requirements="\w+",description="name patient")
+     * 
      * @OA\Get(
      *     path="/patients",
      *     summary="Find one Patient",
@@ -80,8 +82,9 @@ class PatientRestController extends AbstractFOSRestController
      *     )
      * )
      * @Get(PatientRestController::URI_PATIENT_COLLECTION)
+     * @QueryParam(name="nom",requirements="\w+",description="name patient")
      */
-    public function searchPatient(ParamFetcher $request) //cette methode retourne tout les patient de ma base de donnée
+    public function searchPatient(ParamFetcher $request): View //cette methode retourne tout les patient de ma base de donnée
     {
         try {
             $patients = $this->patientService->searchPatient(["nom" => $request->get('nom')]);
@@ -91,7 +94,7 @@ class PatientRestController extends AbstractFOSRestController
         if ($patients) { //je verifie que mon tableau contient bien les donnée souhaitées et je retourne le resultat
             return View::create($patients, Response::HTTP_OK, ["Content-Type" => "Application/json"]);
         } else { //dans le cas contraire je retourne un 404 
-            return View::create($request->query->get('nom'), Response::HTTP_NOT_FOUND, ["Content-type" => "Application/json"]);
+            return View::create([], Response::HTTP_NOT_FOUND, ["Content-type" => "Application/json"]);
         }
     }
 
@@ -163,7 +166,7 @@ class PatientRestController extends AbstractFOSRestController
      * @Paramconverter("patientDto",converter="fos_rest.request_body")
      * @return void
      */
-    public function updatePatient(Patient $patient, PatientDto $patientDto) //ici je recupère le Post
+    public function updatePatient(Patient $patient, PatientDto $patientDto): View //ici je recupère le Post
     //que je converti en PatientDto et grâce au paramètre de id de URI je recupère le patient à modifier dans ma bdd
     {
         try { //ici je passe en argu mes para ci-dessus à la methode persist de ma couche service
@@ -191,10 +194,6 @@ class PatientRestController extends AbstractFOSRestController
      *         response="500",
      *         description="Contact us, for this response"
      *     ),
-     *      @OA\Response(
-     *         response="404",
-     *         description="Patients not found"
-     *     ),
      *      @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -210,7 +209,7 @@ class PatientRestController extends AbstractFOSRestController
      * 
      * @return void
      */
-    public function removePatient(Patient $patient) //cette methode va supprimer un patient choisi
+    public function removePatient(Patient $patient): View //cette methode va supprimer un patient choisi
     {
         try { //ici je passe en argu mon para ci-dessus à la methode removePatient de ma couche service
             $this->patientService->removePatient($patient);
@@ -224,7 +223,7 @@ class PatientRestController extends AbstractFOSRestController
 
     /**
      * @OA\Post(
-     *     path="/patients/{id}",
+     *     path="/patients/consultations",
      *     summary="add meeting Patient",
      *     description="add meeting Patient",
      *     operationId="addRdv",
@@ -232,7 +231,83 @@ class PatientRestController extends AbstractFOSRestController
      *     @OA\Response(
      *         response=200,
      *         description="successful operation",
-     *         @OA\JsonContent(ref="#/components/schemas/PatientDto")
+     *         @OA\JsonContent(ref="#/components/schemas/ConsultationDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     ),
+     *      @OA\Response(
+     *         response="404",
+     *         description="Patients not found"
+     *     )
+     * )
+     * @Post(PatientRestController::URI_PATIENT_ADD_INSTANCE)
+     * @ParamConverter("consultationDto",converter="fos_rest.request_body")
+     * @return void
+     */
+    public function addRdv(ConsultationDto $consultationDto): View
+    {
+        try {
+            $this->patientService->addRdvConsult($consultationDto);
+        } catch (ServiceException $e) {
+            return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
+        }
+        return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]);
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/patients/consultations/{id}",
+     *     summary="delete Patient consultation",
+     *     description="delete Patient consultation",
+     *     operationId="deleteRdv",
+     *     tags={"patient"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/ConsultationDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     ),
+     *      @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id of consultation to return",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     )
+     * )
+     * @Delete(PatientRestController::URI_PATIENT_DELETE_INSTANCE)
+     * 
+     * @return void
+     */
+    public function deleteRdv(Consultation $consultation): View
+    {
+        try {
+            $this->patientService->removeConsultation($consultation);
+        } catch (ServiceException $e) {
+            return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
+        }
+        return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]);
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/patients/{id}/consultations",
+     *     summary="read Patient consultation",
+     *     description="read Patient consultation",
+     *     operationId="readRdv",
+     *     tags={"patient"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/ConsultationDto")
      *     ),
      *     @OA\Response(
      *         response="500",
@@ -253,17 +328,21 @@ class PatientRestController extends AbstractFOSRestController
      *         )
      *     )
      * )
-     * @Post(PatientRestController::URI_PATIENT_ADD_INSTANCE)
-     * @ParamConverter("consultationDto",converter="fos_rest.request_body")
+     * @Get(PatientRestController::URI_PATIENT_SHOW_INSTANCE)
+     *
      * @return void
      */
-    public function addRdv(ConsultationDto $consultationDto)
+    public function readRdv(Patient $patient): View
     {
         try {
-            $this->patientService->addRdvConsult($consultationDto);
+            $consultArrayDto = $this->patientService->showConsultation($patient);
         } catch (ServiceException $e) {
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
         }
-        return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]);
+        if ($consultArrayDto) {
+            return View::create($consultArrayDto, Response::HTTP_OK, ["Content-type" => "Application/json"]);
+        } else {
+            return View::create([], Response::HTTP_NOT_FOUND, ["Content-type" => "Application/json"]);
+        }
     }
 }

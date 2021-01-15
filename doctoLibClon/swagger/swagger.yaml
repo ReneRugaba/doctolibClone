@@ -76,32 +76,6 @@ paths:
           description: 'Contact us, for this response'
         '404':
           description: 'Patients not found'
-    post:
-      tags:
-        - patient
-      summary: 'add meeting Patient'
-      description: 'add meeting Patient'
-      operationId: addRdv
-      parameters:
-        -
-          name: id
-          in: path
-          description: 'id of patient to return'
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: 'successful operation'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PatientDto'
-        '500':
-          description: 'Contact us, for this response'
-        '404':
-          description: 'Patients not found'
     delete:
       tags:
         - patient
@@ -126,10 +100,89 @@ paths:
                 $ref: '#/components/schemas/PatientDto'
         '500':
           description: 'Contact us, for this response'
+  /patients/consultations:
+    post:
+      tags:
+        - patient
+      summary: 'add meeting Patient'
+      description: 'add meeting Patient'
+      operationId: addRdv
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultationDto'
+        '500':
+          description: 'Contact us, for this response'
+        '404':
+          description: 'Patients not found'
+  '/patients/consultations/{id}':
+    delete:
+      tags:
+        - patient
+      summary: 'delete Patient consultation'
+      description: 'delete Patient consultation'
+      operationId: deleteRdv
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'id of consultation to return'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultationDto'
+        '500':
+          description: 'Contact us, for this response'
+  '/patients/{id}/consultations':
+    delete:
+      tags:
+        - patient
+      summary: 'read Patient consultation'
+      description: 'read Patient consultation'
+      operationId: readRdv
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'id of patient to return'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsultationDto'
+        '500':
+          description: 'Contact us, for this response'
         '404':
           description: 'Patients not found'
 components:
   schemas:
+    ConsultationDto:
+      properties:
+        id:
+          type: integer
+        dateRdv:
+          type: string
+        patient:
+          type: integer
+        practicien:
+          type: integer
+      type: object
     PatientDto:
       properties:
         id:

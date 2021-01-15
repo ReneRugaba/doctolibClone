@@ -24,4 +24,11 @@ class ConsultationMapped
         $consultation->setDateRdv(new DateTime($consultationDto->getDateRdv()))->setPatient($patient)->setPracticien($practicien);
         return $consultation;
     }
+
+    public function transformeConsultationToConsultationDto(ConsultationDto $consultationDto, Consultation $consultation)
+    {
+        $consultationDto->setId($consultation->getId())->setDateRdv($consultation->getDateRdv()->format("d-m-Y"))
+            ->setPatient($consultation->getPatient()->getId())->setPracticien($consultation->getPracticien()->getId());
+        return $consultationDto;
+    }
 }
