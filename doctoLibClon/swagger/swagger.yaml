@@ -170,6 +170,35 @@ paths:
           description: 'Contact us, for this response'
         '404':
           description: 'Patients not found'
+  /practiens:
+    get:
+      tags:
+        - practicien
+      summary: 'Find all practiciens'
+      description: 'Returns all practiens'
+      operationId: searchAll
+      parameters:
+        -
+          name: tags
+          in: query
+          description: 'Tags to filter by object'
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: object
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticienDto'
+        '500':
+          description: 'Contact us, for this response'
+        '404':
+          description: 'Patients not found'
 components:
   schemas:
     ConsultationDto:
@@ -197,4 +226,23 @@ components:
           type: string
         adresse:
           type: integer
+      type: object
+    PracticienDto:
+      properties:
+        id:
+          type: integer
+        nom:
+          type: string
+        prenom:
+          type: string
+        patient:
+          type: array
+        idAdresse:
+          type: integer
+        consultation:
+          type: array
+        specialite:
+          type: integer
+        username:
+          type: string
       type: object

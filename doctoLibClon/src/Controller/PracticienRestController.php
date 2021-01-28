@@ -14,7 +14,15 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Info(
+ *      description="Patient Management",
+ *      version="V1",
+ *      title="Patient Management"
+ * )
+ */
 class PracticienRestController extends AbstractFOSRestController
 {
     private $practicienService;
@@ -30,6 +38,35 @@ class PracticienRestController extends AbstractFOSRestController
     }
 
     /**
+     * 
+     * @OA\Get(
+     *     path="/practiens",
+     *     summary="Find all practiciens",
+     *     description="Returns all practiens",
+     *     operationId="searchAll",
+     *     tags={"practicien"},
+     *      @OA\Parameter(
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PracticienDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Patients not found"
+     *     )
+     * )
      * @Get(PracticienRestController::URI_REST_COLLECTION)
      */
     public function searchAll() //cette methode me retourne l'ensembre de mes practiciens
@@ -40,7 +77,7 @@ class PracticienRestController extends AbstractFOSRestController
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "application/json"]); //ici je les retourne
         }
 
-        if ($practiciens) { // si un objet Practicien m'est retourné par ma ma couche service, j'expose le fresultat en Json
+        if ($practiciens) { // si un tableau, d'objet de Practiciens, m'est retourné par ma ma couche service, j'expose le fresultat en Json
             return View::create($practiciens, Response::HTTP_OK, ["Content-type" => "application/json"]);
         } else { // dans le cas ou aucun objet Practicien m'est retourné par ma ma couche service, j'expose le fresultat en Json également
             return View::create([], Response::HTTP_NOT_FOUND, ["Content-type" => "application/json"]);
@@ -48,6 +85,30 @@ class PracticienRestController extends AbstractFOSRestController
     }
 
     /**
+     * @OA\Post(
+     *     path="/practiens",
+     *     summary="creat practicien",
+     *     description="creat practicien",
+     *     operationId="creatPracticien",
+     *     tags={"practicien"},
+     *      @OA\Parameter(
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PracticienDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     )
+     * )
      * @Post(PracticienRestController::URI_REST_COLLECTION)
      * @ParamConverter("practicienDto",converter="fos_rest.request_body")
      * @return 
@@ -65,6 +126,34 @@ class PracticienRestController extends AbstractFOSRestController
 
 
     /**
+     * @OA\Delete(
+     *     path="/practiciens/{id}",
+     *     summary="creat practicien",
+     *     description="creat practicien",
+     *     operationId="creatPracticien",
+     *     tags={"practicien"},
+     *      @OA\Parameter(
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PracticienDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Patients not found"
+     *     )
+     * )
      * @Delete(PracticienRestController::URI_REST_INSTANCE)
      *
      * @return void
@@ -82,6 +171,30 @@ class PracticienRestController extends AbstractFOSRestController
     }
 
     /**
+     *  @OA\Put(
+     *     path="/practiciens/{id}",
+     *     summary="creat practicien",
+     *     description="creat practicien",
+     *     operationId="creatPracticien",
+     *     tags={"practicien"},
+     *      @OA\Parameter(
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PracticienDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     )
+     * )
      * @Put(PracticienRestController::URI_REST_INSTANCE)
      * @paramConverter("practicienDto",converter="fos_rest.request_body")
      * @return void

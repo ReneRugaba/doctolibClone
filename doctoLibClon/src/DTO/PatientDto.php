@@ -5,6 +5,7 @@ namespace App\DTO;
 
 use DateTime;
 
+use App\Entity\Adresse;
 use OpenApi\Annotations as OA;
 
 /**
@@ -51,9 +52,10 @@ class PatientDto
     /**
      * @OA\Property(type="integer")
      *
-     * @var int|null
+     * @var Adresse|null
      */
     private $adresse;
+
 
     private $password;
 
@@ -141,7 +143,7 @@ class PatientDto
     /**
      * Get the value of adresse
      */
-    public function getAdresse(): ?int
+    public function getAdresse(): ?Adresse
     {
         return $this->adresse;
     }
@@ -151,7 +153,7 @@ class PatientDto
      *
      * @return  self
      */
-    public function setAdresse(?int $adresse): ?self
+    public function setAdresse(?Adresse $adresse): ?self
     {
         $this->adresse = $adresse;
 
@@ -182,7 +184,7 @@ class PatientDto
     /**
      * Get the value of password
      */
-    public function getPasswod(): ?string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -192,7 +194,7 @@ class PatientDto
      *
      * @return  self
      */
-    public function setPasswod(?string $password): ?self
+    public function setPassword(?string $password): ?self
     {
         $this->password = $password;
 

@@ -1,0 +1,2 @@
+commande cli swagger:
+vendor/bin/openapi --format yaml --output swagger/swagger.yaml src/Controller/PatientRestController.php src

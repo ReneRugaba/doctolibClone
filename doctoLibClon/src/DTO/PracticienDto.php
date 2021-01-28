@@ -5,19 +5,72 @@ namespace App\DTO;
 use App\Entity\Adresse;
 use App\Entity\Consultation;
 use App\Entity\Specialite;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
+
+use OpenApi\Annotations as OA;
+
+/**
+ * @OA\schema()
+ */
 class PracticienDto
 {
+    /**
+     * @OA\Property(type="integer")
+     *
+     * @var integer|null
+     */
     private $id;
+
+    /**
+     * @OA\Property(type="string")
+     *
+     * @var sgtring|null
+     */
     private $nom;
+
+    /**
+     * @OA\Property(type="string")
+     *
+     * @var integer|null
+     */
     private $prenom;
+
+    /**
+     * @OA\Property(type="arra")
+     *
+     * @var array|null
+     */
     private $patient;
+
+    /**
+     * @OA\Property(type="integer")
+     *
+     * @var integer|null
+     */
     private $idAdresse;
+
+    /**
+     * @OA\Property(type="array")
+     *
+     * @var array|null
+     */
     private $consultation;
+
+    /**
+     * @OA\Property(type="integer")
+     *
+     * @var integer|null
+     */
     private $specialite;
+
+    /**
+     * @OA\Property(type="string")
+     *
+     * @var string|null
+     */
     private $username;
+
+
     private $password;
 
 
@@ -84,7 +137,7 @@ class PracticienDto
     /**
      * Get the value of patient
      */
-    public function getPatient(): ?Collection
+    public function getPatient(): ?array
     {
         return $this->patient;
     }
@@ -94,7 +147,7 @@ class PracticienDto
      *
      * @return  self
      */
-    public function setPatient(?Collection $patient): ?self
+    public function setPatient(?array $patient): ?self
     {
         $this->patient = $patient;
 
@@ -124,7 +177,7 @@ class PracticienDto
     /**
      * Get the value of consultation
      */
-    public function getConsultation(): ?Collection
+    public function getConsultation(): ?array
     {
         return $this->consultation;
     }
@@ -134,7 +187,7 @@ class PracticienDto
      *
      * @return  self
      */
-    public function setConsultation(?Collection $consultation): ?self
+    public function setConsultation(?array $consultation): ?self
     {
         $this->consultation = $consultation;
 

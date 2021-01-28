@@ -44,12 +44,12 @@ class PatientService
 
     public function searchPatient(array $array) //cette methode me permet de chercher tous les patient de ma bdd
     {
-        try { //jerecupère les patients present dans ma bdd dans un tableau $patiens
+        try { //jerecupère les patients present dans ma bdd dans un $patien
             $patient = $this->patientRepository->findOneBy($array);
         } catch (Exception $e) { //je 
             throw new ServiceException($e->getMessage());
         }
-
+        
         $patientDto = $this->patientMapped->transformPatientToPatientDto($patient);
         return $patientDto; //je retourne le tableau de mes patientDto
     }

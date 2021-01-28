@@ -77,6 +77,7 @@ class PatientRestController extends AbstractFOSRestController
      *             default="available",
      *             @OA\Items(
      *                 type="string"
+     * 
      *             )
      *         )
      *     )

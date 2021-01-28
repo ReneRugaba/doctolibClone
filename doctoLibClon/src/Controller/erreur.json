@@ -1,0 +1,326 @@
+{
+    "type": "https://tools.ietf.org/html/rfc2616#section-10",
+    "title": "An error occurred",
+    "status": 400,
+    "detail": "The type of the \"id\" attribute for class \"App\\Entity\\Consultation\" must be one of \"int\" (\"NULL\" given).",
+    "class": "Symfony\\Component\\HttpKernel\\Exception\\BadRequestHttpException",
+    "trace": [
+        {
+            "namespace": "",
+            "short_class": "",
+            "class": "",
+            "type": "",
+            "function": "",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\friendsofsymfony\\rest-bundle\\Request\\RequestBodyParamConverter.php",
+            "line": 96,
+            "args": []
+        },
+        {
+            "namespace": "FOS\\RestBundle\\Request",
+            "short_class": "RequestBodyParamConverter",
+            "class": "FOS\\RestBundle\\Request\\RequestBodyParamConverter",
+            "type": "->",
+            "function": "apply",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\sensio\\framework-extra-bundle\\src\\Request\\ParamConverter\\ParamConverterManager.php",
+            "line": 77,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpFoundation\\Request"
+                ],
+                [
+                    "object",
+                    "Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter"
+                ]
+            ]
+        },
+        {
+            "namespace": "Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter",
+            "short_class": "ParamConverterManager",
+            "class": "Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager",
+            "type": "->",
+            "function": "applyConverter",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\sensio\\framework-extra-bundle\\src\\Request\\ParamConverter\\ParamConverterManager.php",
+            "line": 48,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpFoundation\\Request"
+                ],
+                [
+                    "object",
+                    "Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter"
+                ]
+            ]
+        },
+        {
+            "namespace": "Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter",
+            "short_class": "ParamConverterManager",
+            "class": "Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager",
+            "type": "->",
+            "function": "apply",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\sensio\\framework-extra-bundle\\src\\EventListener\\ParamConverterListener.php",
+            "line": 72,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpFoundation\\Request"
+                ],
+                [
+                    "array",
+                    {
+                        "consultation": [
+                            "object",
+                            "Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter"
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "namespace": "Sensio\\Bundle\\FrameworkExtraBundle\\EventListener",
+            "short_class": "ParamConverterListener",
+            "class": "Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener",
+            "type": "->",
+            "function": "onKernelController",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\symfony\\event-dispatcher\\Debug\\WrappedListener.php",
+            "line": 126,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpKernel\\Event\\ControllerEvent"
+                ],
+                [
+                    "string",
+                    "kernel.controller"
+                ],
+                [
+                    "object",
+                    "Symfony\\Component\\HttpKernel\\Debug\\TraceableEventDispatcher"
+                ]
+            ]
+        },
+        {
+            "namespace": "Symfony\\Component\\EventDispatcher\\Debug",
+            "short_class": "WrappedListener",
+            "class": "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener",
+            "type": "->",
+            "function": "__invoke",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\symfony\\event-dispatcher\\EventDispatcher.php",
+            "line": 264,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpKernel\\Event\\ControllerEvent"
+                ],
+                [
+                    "string",
+                    "kernel.controller"
+                ],
+                [
+                    "object",
+                    "Symfony\\Component\\HttpKernel\\Debug\\TraceableEventDispatcher"
+                ]
+            ]
+        },
+        {
+            "namespace": "Symfony\\Component\\EventDispatcher",
+            "short_class": "EventDispatcher",
+            "class": "Symfony\\Component\\EventDispatcher\\EventDispatcher",
+            "type": "->",
+            "function": "doDispatch",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\symfony\\event-dispatcher\\EventDispatcher.php",
+            "line": 239,
+            "args": [
+                [
+                    "array",
+                    [
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ]
+                    ]
+                ],
+                [
+                    "string",
+                    "kernel.controller"
+                ],
+                [
+                    "object",
+                    "Symfony\\Component\\HttpKernel\\Event\\ControllerEvent"
+                ]
+            ]
+        },
+        {
+            "namespace": "Symfony\\Component\\EventDispatcher",
+            "short_class": "EventDispatcher",
+            "class": "Symfony\\Component\\EventDispatcher\\EventDispatcher",
+            "type": "->",
+            "function": "callListeners",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\symfony\\event-dispatcher\\EventDispatcher.php",
+            "line": 73,
+            "args": [
+                [
+                    "array",
+                    [
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ],
+                        [
+                            "object",
+                            "Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener"
+                        ]
+                    ]
+                ],
+                [
+                    "string",
+                    "kernel.controller"
+                ],
+                [
+                    "object",
+                    "Symfony\\Component\\HttpKernel\\Event\\ControllerEvent"
+                ]
+            ]
+        },
+        {
+            "namespace": "Symfony\\Component\\EventDispatcher",
+            "short_class": "EventDispatcher",
+            "class": "Symfony\\Component\\EventDispatcher\\EventDispatcher",
+            "type": "->",
+            "function": "dispatch",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\symfony\\event-dispatcher\\Debug\\TraceableEventDispatcher.php",
+            "line": 168,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpKernel\\Event\\ControllerEvent"
+                ],
+                [
+                    "string",
+                    "kernel.controller"
+                ]
+            ]
+        },
+        {
+            "namespace": "Symfony\\Component\\EventDispatcher\\Debug",
+            "short_class": "TraceableEventDispatcher",
+            "class": "Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher",
+            "type": "->",
+            "function": "dispatch",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\symfony\\http-kernel\\HttpKernel.php",
+            "line": 146,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpKernel\\Event\\ControllerEvent"
+                ],
+                [
+                    "string",
+                    "kernel.controller"
+                ]
+            ]
+        },
+        {
+            "namespace": "Symfony\\Component\\HttpKernel",
+            "short_class": "HttpKernel",
+            "class": "Symfony\\Component\\HttpKernel\\HttpKernel",
+            "type": "->",
+            "function": "handleRaw",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\symfony\\http-kernel\\HttpKernel.php",
+            "line": 80,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpFoundation\\Request"
+                ],
+                [
+                    "integer",
+                    1
+                ]
+            ]
+        },
+        {
+            "namespace": "Symfony\\Component\\HttpKernel",
+            "short_class": "HttpKernel",
+            "class": "Symfony\\Component\\HttpKernel\\HttpKernel",
+            "type": "->",
+            "function": "handle",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\vendor\\symfony\\http-kernel\\Kernel.php",
+            "line": 201,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpFoundation\\Request"
+                ],
+                [
+                    "integer",
+                    1
+                ],
+                [
+                    "boolean",
+                    true
+                ]
+            ]
+        },
+        {
+            "namespace": "Symfony\\Component\\HttpKernel",
+            "short_class": "Kernel",
+            "class": "Symfony\\Component\\HttpKernel\\Kernel",
+            "type": "->",
+            "function": "handle",
+            "file": "C:\\Users\\rugab\\OneDrive\\Bureau\\doctolibclone\\doctoLibClon\\public\\index.php",
+            "line": 25,
+            "args": [
+                [
+                    "object",
+                    "Symfony\\Component\\HttpFoundation\\Request"
+                ]
+            ]
+        }
+    ]
+}
