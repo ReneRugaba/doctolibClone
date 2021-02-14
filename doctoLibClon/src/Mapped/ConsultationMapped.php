@@ -27,8 +27,8 @@ class ConsultationMapped
 
     public function transformeConsultationToConsultationDto(ConsultationDto $consultationDto, Consultation $consultation)
     {
-        $consultationDto->setId($consultation->getId())->setDateRdv($consultation->getDateRdv()->format("d-m-Y"))
-            ->setPatient($consultation->getPatient()->getId())->setPracticien($consultation->getPracticien()->getId());
+        $consultationDto->setId($consultation->getId())->setDateRdv($consultation->getDateRdv()->format("d-m-Y H:i:s"))
+            ->setPatient($consultation->getPatient()->getId())->setPracticien($consultation->getPracticien()->getNom());
         return $consultationDto;
     }
 }

@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: 'Patient Management'
-  description: 'Patient Management'
+  title: 'Praticien and Patient Management'
+  description: 'Praticien and Patient Management'
   version: V1
 paths:
   /patients:
@@ -144,7 +144,7 @@ paths:
         '500':
           description: 'Contact us, for this response'
   '/patients/{id}/consultations':
-    delete:
+    get:
       tags:
         - patient
       summary: 'read Patient consultation'
@@ -174,20 +174,80 @@ paths:
     get:
       tags:
         - practicien
-      summary: 'Find all practiciens'
-      description: 'Returns all practiens'
-      operationId: searchAll
+      summary: 'Find paticien''s array whith params'
+      description: 'Returns array practiens'
+      operationId: searchAllByIndex
       parameters:
         -
-          name: tags
+          name: specialite
           in: query
-          description: 'Tags to filter by object'
+          description: 'Status values that needed to be considered for filter'
           required: true
           explode: true
           schema:
             type: array
             items:
-              type: object
+              type: string
+            default: available
+        -
+          name: ville
+          in: query
+          description: 'Status values that needed to be considered for filter'
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+            default: available
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticienDto'
+        '500':
+          description: 'Contact us, for this response'
+        '404':
+          description: 'Patients not found'
+    post:
+      tags:
+        - practicien
+      summary: 'creat praticien'
+      description: 'creat praticien'
+      operationId: creatPracticien
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticienDto'
+        '500':
+          description: 'Contact us, for this response'
+  '/practiciens/{id}':
+    put:
+      tags:
+        - practicien
+      summary: 'creat practicien'
+      description: 'creat practicien'
+      operationId: creatPracticien
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticienDto'
+        '500':
+          description: 'Contact us, for this response'
+    delete:
+      tags:
+        - practicien
+      summary: 'creat practicien'
+      description: 'creat practicien'
+      operationId: creatPracticien
       responses:
         '200':
           description: 'successful operation'
@@ -238,7 +298,7 @@ components:
         patient:
           type: array
         idAdresse:
-          type: integer
+          type: Adresse
         consultation:
           type: array
         specialite:

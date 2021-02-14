@@ -5,22 +5,24 @@ namespace App\Controller;
 use App\DTO\PracticienDto;
 use App\Entity\Practicien;
 use FOS\RestBundle\View\View;
+use OpenApi\Annotations as OA;
 use App\Service\PracticienService;
+use FOS\RestBundle\Request\ParamFetcher;
 use App\Service\Exception\ServiceException;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Put;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use OpenApi\Annotations as OA;
 
 /**
  * @OA\Info(
- *      description="Patient Management",
+ *      description="Praticien and Patient  Management",
  *      version="V1",
- *      title="Patient Management"
+ *      title="Praticien and Patient Management"
  * )
  */
 class PracticienRestController extends AbstractFOSRestController
@@ -28,7 +30,7 @@ class PracticienRestController extends AbstractFOSRestController
     private $practicienService;
 
     // constantes qui me permettent de centraliser les chemins liés à mes différentes methodes
-    const URI_REST_COLLECTION = "/practiciens";
+    const URI_REST_COLLECTION = "/praticiens";
     const URI_REST_INSTANCE = "/practiciens/{id}";
 
     public function __construct(PracticienService $practicienService)
@@ -41,9 +43,9 @@ class PracticienRestController extends AbstractFOSRestController
      * 
      * @OA\Get(
      *     path="/practiens",
-     *     summary="Find all practiciens",
-     *     description="Returns all practiens",
-     *     operationId="searchAll",
+     *     summary="Find paticien's array whith params",
+     *     description="Returns array practiens",
+     *     operationId="searchAllByIndex",
      *     tags={"practicien"},
      *      @OA\Parameter(
      *         @OA\Schema(
@@ -65,14 +67,46 @@ class PracticienRestController extends AbstractFOSRestController
      *     @OA\Response(
      *         response="404",
      *         description="Patients not found"
+     *     ),@OA\Parameter(
+     *         name="specialite",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             type="array",
+     *             default="available",
+     *             @OA\Items(
+     *                 type="string"
+     * 
+     *             )
+     *         )
+     *     ),@OA\Parameter(
+     *         name="ville",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             type="array",
+     *             default="available",
+     *             @OA\Items(
+     *                 type="string"
+     * 
+     *             )
+     *         )
      *     )
      * )
      * @Get(PracticienRestController::URI_REST_COLLECTION)
+     * @QueryParam(name="specialite")
+     * @QueryParam(name="ville")
      */
-    public function searchAll() //cette methode me retourne l'ensembre de mes practiciens
+    public function searchAllByIndex(ParamFetcher $request) //cette methode me retourne l'ensembre de mes practiciens
     {
-        try { //ici je passe par l'attribut de ma class pour avoir accès à la methode searchAll de la class PracticienService
-            $practiciens = $this->practicienService->searchAll();
+        
+        try { //ici je passe passe en argument un tableau associatif avec les paramRequest que j'ai recuperé l'URI
+            $practiciens = $this->practicienService->searchAll(["specialite"=>$request->get('specialite'),
+                                                                "ville"=>$request->get('ville')]);
         } catch (ServiceException $e) { //ici je recupère toutes les exceptions interne à la base de donnée
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "application/json"]); //ici je les retourne
         }
@@ -87,13 +121,13 @@ class PracticienRestController extends AbstractFOSRestController
     /**
      * @OA\Post(
      *     path="/practiens",
-     *     summary="creat practicien",
-     *     description="creat practicien",
+     *     summary="creat praticien",
+     *     description="creat praticien",
      *     operationId="creatPracticien",
      *     tags={"practicien"},
      *      @OA\Parameter(
      *         @OA\Schema(
-     *             type="array",
+     *             type="object",
      *             @OA\Items(
      *                 type="object",
      *             )
@@ -134,7 +168,7 @@ class PracticienRestController extends AbstractFOSRestController
      *     tags={"practicien"},
      *      @OA\Parameter(
      *         @OA\Schema(
-     *             type="array",
+     *             type="object",
      *             @OA\Items(
      *                 type="object",
      *             )
@@ -179,7 +213,7 @@ class PracticienRestController extends AbstractFOSRestController
      *     tags={"practicien"},
      *      @OA\Parameter(
      *         @OA\Schema(
-     *             type="array",
+     *             type="PracticienDto",
      *             @OA\Items(
      *                 type="object",
      *             )

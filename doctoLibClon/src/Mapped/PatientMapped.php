@@ -23,21 +23,23 @@ class PatientMapped
         $this->patientDto = $patientDto;
         $this->encodepassword = $encodepassword;
     }
-    public function transformPatientToPatientDto(Patient $patient): PatientDto
+    public function transformPatientToPatientDto(Patient $patient,$adresse=null): PatientDto
     {
         
         $patientDto = $this->patientDto->setId($patient->getId())->setNom($patient->getNom())
-            ->setPrenom($patient->getPrenom())->setDateNaissance($patient->getDateNaissance()->format("d-m-Y"))
-            ->setAdresse($patient->getAdresse())->setEmail($patient->getEmail());
+            ->setPrenom($patient->getPrenom())->setDateNaissance($patient->getDateNaissance()->format("Y-m-d"))
+            ->setAdresse($adresse)->setEmail($patient->getEmail());
             
         return $patientDto;
     }
 
     public function transformPatientDtoToPatient(Patient $patient, PatientDto $patientDto, Adresse $adresse): Patient
     {
+        
         $patient->setNom($patientDto->getNom())->setPrenom($patientDto->getPrenom())
             ->setAdresse($adresse)->setDateNaissance(new DateTime($patientDto->getDateNaissance()))
-            ->setEmail($patientDto->getEmail())->setPassword($this->encodepassword->encodePassword(new User, $patientDto->getPassword()));
+            ->setEmail($patientDto->getEmail())
+            ->setPassword($this->encodepassword->encodePassword(new User, $patientDto->getPassword()));
         return $patient;
     }
 }

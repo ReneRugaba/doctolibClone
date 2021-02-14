@@ -153,7 +153,7 @@ class PatientDto
      *
      * @return  self
      */
-    public function setAdresse(?Adresse $adresse): ?self
+    public function setAdresse(Adresse $adresse): ?self
     {
         $this->adresse = $adresse;
 

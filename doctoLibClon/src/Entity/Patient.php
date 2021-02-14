@@ -55,6 +55,7 @@ class Patient extends User
 
     /**
      * @ORM\OneToMany(targetEntity=Consultation::class, mappedBy="patient",cascade={"persist"})
+     * 
      */
     private $consultations;
 
@@ -142,6 +143,7 @@ class Patient extends User
     }
 
     /**
+     * 
      * @return Collection|Consultation[]
      */
     public function getConsultations(): Collection

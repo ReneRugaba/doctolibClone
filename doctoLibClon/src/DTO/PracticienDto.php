@@ -36,16 +36,16 @@ class PracticienDto
     private $prenom;
 
     /**
-     * @OA\Property(type="arra")
+     * @OA\Property(type="array")
      *
      * @var array|null
      */
     private $patient;
 
     /**
-     * @OA\Property(type="integer")
+     * @OA\Property(type="Adresse")
      *
-     * @var integer|null
+     * @var Adresse|null
      */
     private $idAdresse;
 
@@ -157,7 +157,7 @@ class PracticienDto
     /**
      * Get the value of idAdresse
      */
-    public function getIdAdresse(): ?int
+    public function getIdAdresse(): ?Adresse
     {
         return $this->idAdresse;
     }
@@ -167,7 +167,7 @@ class PracticienDto
      *
      * @return  self
      */
-    public function setIdAdresse(?Int $idAdresse): ?self
+    public function setIdAdresse(?Adresse $idAdresse): ?self
     {
         $this->idAdresse = $idAdresse;
 

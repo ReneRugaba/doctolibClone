@@ -25,9 +25,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @OA\Info(
- *      description="Patient Management",
+ *      description="Praticien and Patient Management",
  *      version="V1",
- *      title="Patient Management"
+ *      title="Praticien and Patient Management"
  * )
  */
 class PatientRestController extends AbstractFOSRestController
@@ -35,6 +35,7 @@ class PatientRestController extends AbstractFOSRestController
     private $patientService;
     const URI_PATIENT_COLLECTION = "/patients";
     const URI_PATIENT_INSTANCE = "/patients/{id}";
+    const URI_PATIENT_INSTANCE_USER = "/patients/{username}";
     const URI_PATIENT_ADD_INSTANCE = "/patients/consultations";
     const URI_PATIENT_DELETE_INSTANCE = "/patients/consultations/{id}";
     const URI_PATIENT_SHOW_INSTANCE = "/patients/{id}/consultations";
@@ -43,6 +44,44 @@ class PatientRestController extends AbstractFOSRestController
     public function __construct(PatientService $patienService)
     {
         $this->patientService = $patienService;
+    }
+
+    /** 
+     * @OA\Get(
+     *     path="/patients/{username}",
+     *     summary="Find one Patient",
+     *     description="Returns one Patient",
+     *     operationId="getCurrentUser",
+     *     tags={"patient"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/PatientDto")
+     *     ),
+     *     @OA\Response(
+     *         response="500",
+     *         description="Contact us, for this response"
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Patients not found"
+     *     )
+     * )
+     * @get(PatientRestcontroller::URI_PATIENT_INSTANCE_USER)
+     * 
+     */
+   public function getCurrentUser(string $username){
+    
+    try {
+        $patientDto=$this->patientService->findCurrentUser($username);
+    } catch (ServiceException $e) {
+        return View::create([],Response::HTTP_INTERNAL_SERVER_ERROR,["Content-type"=>"Application/json"]);
+    }
+        if($patientDto){
+            return View::create($patientDto, Response::HTTP_OK, ["Content-type"=>"application/json"]);
+        }else{
+            return View::create([], Response::HTTP_NOT_FOUND, ["Content-type"=>"application/json"]);
+        }
     }
 
 
@@ -85,10 +124,12 @@ class PatientRestController extends AbstractFOSRestController
      * @Get(PatientRestController::URI_PATIENT_COLLECTION)
      * @QueryParam(name="nom",requirements="\w+",description="name patient")
      */
-    public function searchPatient(ParamFetcher $request): View //cette methode retourne tout les patient de ma base de donnée
+    public function searchPatient(ParamFetcher $request): View 
     {
         try {
+            
             $patients = $this->patientService->searchPatient(["nom" => $request->get('nom')]);
+           
         } catch (ServiceException $e) { //dans le cas ou une exception est throw, j'expose l'erreur en json
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
         }
@@ -170,12 +211,18 @@ class PatientRestController extends AbstractFOSRestController
     public function updatePatient(Patient $patient, PatientDto $patientDto): View //ici je recupère le Post
     //que je converti en PatientDto et grâce au paramètre de id de URI je recupère le patient à modifier dans ma bdd
     {
+        
         try { //ici je passe en argu mes para ci-dessus à la methode persist de ma couche service
-            $this->patientService->persist($patient, $patientDto);
+            
+           
+            $newPatient=$this->patientService->persist($patient, $patientDto);
+           
         } catch (ServiceException $e) { //dans le cas ou une exception est emise j'expose celle-ci en json
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => ""]);
         }
-        return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]); //si l'opération s'est fait
+            $newPatient=$this->patientService->persist($patient, $patientDto);
+            $newPatient=$this->patientService->persist($patient, $patientDto);
+            return View::create($newPatient, Response::HTTP_OK, ["Content-type" => "Application/json"]); //si l'opération s'est fait
         //sans problèmes je retourne une réponse http 200 en json
     }
 
@@ -299,7 +346,7 @@ class PatientRestController extends AbstractFOSRestController
     }
 
     /**
-     * @OA\Delete(
+     * @OA\Get(
      *     path="/patients/{id}/consultations",
      *     summary="read Patient consultation",
      *     description="read Patient consultation",
@@ -346,4 +393,6 @@ class PatientRestController extends AbstractFOSRestController
             return View::create([], Response::HTTP_NOT_FOUND, ["Content-type" => "Application/json"]);
         }
     }
+
+
 }

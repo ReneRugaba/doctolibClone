@@ -40,7 +40,7 @@ class PracticienMapped
         }
 
         $practicienDto = (new PracticienDto())->setId($practien->getId())->setNom($practien->getNom())
-            ->setPrenom($practien->getPrenom())->setPatient($patientDtoArray)->setIdAdresse($practien->getAdresse()->getId())
+            ->setPrenom($practien->getPrenom())->setPatient($patientDtoArray)->setIdAdresse($practien->getAdresse())
             ->setConsultation($consult)->setSpecialite($practien->getSpecialite()->getId())
             ->setUsername($practien->getUsername());
 

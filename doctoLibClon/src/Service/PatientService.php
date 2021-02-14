@@ -7,6 +7,7 @@ use App\Entity\Patient;
 use App\Entity\Consultation;
 use App\Mapped\ConsultationMapped;
 use App\Mapped\PatientMapped;
+use App\Mapped\PracticienMapped;
 use App\Repository\AdresseRepository;
 use App\Repository\PatientRepository;
 use App\Repository\PracticienRepository;
@@ -31,7 +32,8 @@ class PatientService
         EntityManagerInterface $manager,
         AdresseRepository $adresseRepository,
         ConsultationMapped $consultationMapped,
-        PracticienRepository $practicienRepository
+        PracticienRepository $practicienRepository,
+        PracticienMapped $practicienMapped
     ) {
         $this->patientRepository = $patientRepository; //ici je factorise l'instanciation d'objet de patientRepository et la rend disponible dans toutes mes methodes
         $this->adresseRepository = $adresseRepository;
@@ -42,10 +44,23 @@ class PatientService
     }
 
 
+    public function findCurrentUser($username){
+        try {
+            $userCurrent=$this->patientRepository->findBy(["email"=>$username]);
+            $adresse=$this->adresseRepository->findBy(["id"=>$userCurrent[0]->getAdresse()]); 
+            $patientDto= $this->patientMapped->transformPatientToPatientDto($userCurrent[0],$adresse[0]);
+        } catch (Exception $e) {
+            throw new ServiceException($e->getMessage());
+        }
+        return $patientDto;
+    }
+
     public function searchPatient(array $array) //cette methode me permet de chercher tous les patient de ma bdd
     {
         try { //jerecupère les patients present dans ma bdd dans un $patien
+            
             $patient = $this->patientRepository->findOneBy($array);
+            // dd($patient);
         } catch (Exception $e) { //je 
             throw new ServiceException($e->getMessage());
         }
@@ -56,16 +71,24 @@ class PatientService
 
     public function persist($patient, $patientDto) //cette methode me permet de créer et de modifier mon Patient
     {
-
+        
         try { //jerecupère l'objet adresse present dans ma bdd grâce para en argu de find $patientDto->getAdresse()
-            $adresse = $this->adresseRepository->find($patientDto->getAdresse());
+            if (!$patient) {
+                $adresse = $this->adresseRepository->find($patientDto->getAdresse()->getId());
+            }else{
+                $adresse = $this->adresseRepository->find($patient->getAdresse()->getId());
+            }
+            
             //j'utilise la methode transformPatientDtoToPatient à qui je passe en argu mes trois objets pour récupérer un patient modifié ou créé
             $newPatient = $this->patientMapped->transformPatientDtoToPatient($patient, $patientDto, $adresse);
+            
             $this->manager->persist($newPatient); // je le persist
             $this->manager->flush(); // j'execute pour persiter dans la bdd
         } catch (Exception $e) { // dans le cas ou une exception est émise  je la throw vers mon controller ici
             throw new ServiceException($e->getMessage());
         }
+        $newadress= $this->adresseRepository->findby(["id"=>$adresse->getId()]);
+        return $this->patientMapped->transformPatientToPatientDto($newPatient, $newadress[0]);
     }
 
     public function removePatient(Patient $patient) // cette methode suprime le patient en para de celle-ci
@@ -106,6 +129,7 @@ class PatientService
     public function showConsultation(Patient $patient)
     {
         try {
+
             $consultationArray = $patient->getConsultations();
             $consultationArrayDto = [];
             foreach ($consultationArray as $value) {

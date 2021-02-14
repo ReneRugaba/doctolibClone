@@ -36,14 +36,19 @@ class PracticienService
         $this->specialiterepository = $specialiterepository;
     }
 
-    public function searchAll()
+    public function searchAll(array $array)
     {
         try {
-            $practiciens = $this->practicien->findAll();
+            $specialite=$this->specialiterepository->findBy(["specialite"=>$array['specialite']]);
+            $adresse=$this->adresseRepository->findBy(["ville"=>$array['ville']]);
+        
+            $practiciens = $this->practicien->findBy(["specialite"=>$specialite[0]->getId(),"adresse"=>$adresse[0]->getId()]);
+            
             $practicienDtos = [];
             foreach ($practiciens as  $value) {
                 $practicienDtos[] = $this->pacticienMapped->transformPracticienToPracticienDto($value);
             }
+            
         } catch (Exception $e) {
             throw new ServiceException($e->getMessage());
         }
