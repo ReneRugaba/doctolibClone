@@ -1,6 +1,0 @@
-{
-    "require": {
-        "symfony/serializer": "^5.2",
-        "friendsofsymfony/rest-bundle": "^3.0"
-    }
-}
