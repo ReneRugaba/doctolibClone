@@ -2,6 +2,8 @@
 
 namespace App\Mapped;
 
+use App\DTO\AdresseDto;
+use App\DTO\ImageDto;
 use App\DTO\PatientDto;
 use App\Entity\Adresse;
 use App\Entity\Patient;
@@ -15,20 +17,32 @@ class PatientMapped
 {
     private $patientDto;
     private $encodepassword;
+    private $adresseMapped;
 
     public function __construct(
         PatientDto $patientDto,
-        UserPasswordEncoderInterface  $encodepassword
+        UserPasswordEncoderInterface  $encodepassword,
+        AdresseMapped $adresseMapped
     ) {
         $this->patientDto = $patientDto;
         $this->encodepassword = $encodepassword;
+        $this->adresseMapped=$adresseMapped;
     }
     public function transformPatientToPatientDto(Patient $patient,$adresse=null): PatientDto
     {
+        if($adresse){
+            $adresseDto= $this->adresseMapped->transformeAdresseToAdresseDto($adresse,new AdresseDto);
+        }
+        $arrayImages=[];
+        
+        foreach ($patient->getImages() as  $value) {
+            $arrayImages[]=(new ImageDto())->setNameFile("/uploads/".$value->getFileName())
+                            ->setId($value->getId())->setName($value->getName());
+        }
         
         $patientDto = $this->patientDto->setId($patient->getId())->setNom($patient->getNom())
-            ->setPrenom($patient->getPrenom())->setDateNaissance($patient->getDateNaissance()->format("Y-m-d"))
-            ->setAdresse($adresse)->setEmail($patient->getEmail());
+            ->setPrenom($patient->getPrenom())->setDateNaissance($patient->getDateNaissance()->format("d-m-Y"))
+            ->setAdresse($adresseDto)->setEmail($patient->getEmail())->setImage($arrayImages);
             
         return $patientDto;
     }

@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\DTO\PatientDto;
 use App\Entity\Patient;
-use App\DTO\PracticienDto;
-use App\Entity\Practicien;
 use App\DTO\ConsultationDto;
 use App\Entity\Consultation;
 use FOS\RestBundle\View\View;
@@ -13,7 +11,6 @@ use OpenApi\Annotations as OA;
 use App\Service\PatientService;
 use FOS\RestBundle\Request\ParamFetcher;
 use App\Service\Exception\ServiceException;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Put;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +19,7 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use FOS\RestBundle\Controller\Annotations\FileParam;
 
 /**
  * @OA\Info(
@@ -34,11 +32,13 @@ class PatientRestController extends AbstractFOSRestController
 {
     private $patientService;
     const URI_PATIENT_COLLECTION = "/patients";
+    const URI_PATIENT_CREATE = "/patients/create";
     const URI_PATIENT_INSTANCE = "/patients/{id}";
     const URI_PATIENT_INSTANCE_USER = "/patients/{username}";
     const URI_PATIENT_ADD_INSTANCE = "/patients/consultations";
     const URI_PATIENT_DELETE_INSTANCE = "/patients/consultations/{id}";
     const URI_PATIENT_SHOW_INSTANCE = "/patients/{id}/consultations";
+    const URI_PATIENT_IMAGES = "/patients/{id}/images";
 
 
     public function __construct(PatientService $patienService)
@@ -53,6 +53,11 @@ class PatientRestController extends AbstractFOSRestController
      *     description="Returns one Patient",
      *     operationId="getCurrentUser",
      *     tags={"patient"},
+     *     @OA\Parameter(
+     *         description="Parameter with mutliple examples",
+     *         in="path",
+     *         name="username",
+     *         required=true),
      *     @OA\Response(
      *         response=200,
      *         description="successful operation",
@@ -67,7 +72,8 @@ class PatientRestController extends AbstractFOSRestController
      *         description="Patients not found"
      *     )
      * )
-     * @get(PatientRestcontroller::URI_PATIENT_INSTANCE_USER)
+     *
+     * @Get(PatientRestcontroller::URI_PATIENT_INSTANCE_USER)
      * 
      */
    public function getCurrentUser(string $username){
@@ -87,7 +93,7 @@ class PatientRestController extends AbstractFOSRestController
 
     /**
      * 
-     * @OA\Get(
+     * @OA\Post(
      *     path="/patients",
      *     summary="Find one Patient",
      *     description="Returns one Patient",
@@ -121,7 +127,7 @@ class PatientRestController extends AbstractFOSRestController
      *         )
      *     )
      * )
-     * @Get(PatientRestController::URI_PATIENT_COLLECTION)
+     * @Post(PatientRestController::URI_PATIENT_COLLECTION)
      * @QueryParam(name="nom",requirements="\w+",description="name patient")
      */
     public function searchPatient(ParamFetcher $request): View 
@@ -133,7 +139,7 @@ class PatientRestController extends AbstractFOSRestController
         } catch (ServiceException $e) { //dans le cas ou une exception est throw, j'expose l'erreur en json
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
         }
-        if ($patients) { //je verifie que mon tableau contient bien les donnée souhaitées et je retourne le resultat
+        if ($patients) { //je verifie que mon patient existe et je retourne le resultat
             return View::create($patients, Response::HTTP_OK, ["Content-Type" => "Application/json"]);
         } else { //dans le cas contraire je retourne un 404 
             return View::create([], Response::HTTP_NOT_FOUND, ["Content-type" => "Application/json"]);
@@ -157,19 +163,19 @@ class PatientRestController extends AbstractFOSRestController
      *         description="Contact us, for this response"
      *     )
      * )
-     * @Post(PatientRestController::URI_PATIENT_COLLECTION)
+     * @Post(PatientRestController::URI_PATIENT_CREATE)
      * @ParamConverter("patientDto",converter="fos_rest.request_body")
      * @return View
      */
     public function createPatient(PatientDto $patientDto): View //cette methode crée des Patients
     {
-        try { //ici je fait appel à la methode persist de ma class 
+        try { //ici je fait appel à la methode persist de ma class PatientService
             // PatientService pour persist en lui donnant une instance de patient et PatientDto
-            $this->patientService->persist(new Patient, $patientDto);
+            $this->patientService->persistPatient(new Patient, $patientDto);
         } catch (ServiceException $e) { //dans le cas ou une erreur se produit coté serveur je retourne l'exception
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => "Application/json"]);
         }
-        return View::create([], Response::HTTP_OK, ["Content-type" => "Application/json"]); //je retourne le resultat du Post en retournant une repnse http 200
+        return View::create([], Response::HTTP_CREATED, ["Content-type" => "Application/json"]); //je retourne le resultat du Post en retournant une repnse http 200
     }
 
 
@@ -208,21 +214,20 @@ class PatientRestController extends AbstractFOSRestController
      * @Paramconverter("patientDto",converter="fos_rest.request_body")
      * @return void
      */
-    public function updatePatient(Patient $patient, PatientDto $patientDto): View //ici je recupère le Post
+    public function updatePatient(Patient $patient, PatientDto $patientDto): View //ici je recupère le Put
     //que je converti en PatientDto et grâce au paramètre de id de URI je recupère le patient à modifier dans ma bdd
     {
         
         try { //ici je passe en argu mes para ci-dessus à la methode persist de ma couche service
             
            
-            $newPatient=$this->patientService->persist($patient, $patientDto);
+            $newPatient=$this->patientService->persistPatient($patient, $patientDto);
            
         } catch (ServiceException $e) { //dans le cas ou une exception est emise j'expose celle-ci en json
             return View::create($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, ["Content-type" => ""]);
         }
-            $newPatient=$this->patientService->persist($patient, $patientDto);
-            $newPatient=$this->patientService->persist($patient, $patientDto);
-            return View::create($newPatient, Response::HTTP_OK, ["Content-type" => "Application/json"]); //si l'opération s'est fait
+           
+            return View::create($newPatient, Response::HTTP_CREATED, ["Content-type" => "Application/json"]); //si l'opération s'est fait
         //sans problèmes je retourne une réponse http 200 en json
     }
 
@@ -392,6 +397,27 @@ class PatientRestController extends AbstractFOSRestController
         } else {
             return View::create([], Response::HTTP_NOT_FOUND, ["Content-type" => "Application/json"]);
         }
+    }
+
+
+
+    /**
+     * 
+     * @Post(PatientRestController::URI_PATIENT_IMAGES)
+     * @FileParam(name="image")
+     * @return View
+     */
+    public function setPatientimage(ParamFetcher $params, Patient $patient){
+    
+       try {
+        $fichier=$params->get('image');
+        $destinationFile=$this->getParameter('image_dir');
+        $this->patientService->setImagePatientTorepository($fichier,$patient,$destinationFile);
+       } catch (ServiceException $e) {
+           return View::create($e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR,["Content-type"=>"Application/json"]);
+       }
+       return View::create([],Response::HTTP_CREATED,["Content-type"=>"Application/json"]);
+        
     }
 
 

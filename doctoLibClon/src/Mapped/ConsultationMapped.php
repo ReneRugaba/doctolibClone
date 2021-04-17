@@ -3,6 +3,8 @@
 namespace App\Mapped;
 
 use App\DTO\ConsultationDto;
+use App\DTO\PatientDto;
+use App\DTO\PracticienDto;
 use App\Entity\Consultation;
 use App\Entity\Patient;
 use App\Entity\Practicien;
@@ -25,10 +27,10 @@ class ConsultationMapped
         return $consultation;
     }
 
-    public function transformeConsultationToConsultationDto(ConsultationDto $consultationDto, Consultation $consultation)
+    public function transformeConsultationToConsultationDto(ConsultationDto $consultationDto, Consultation $consultation,PatientDto $patientDto=null,PracticienDto $praticienDto=null)
     {
         $consultationDto->setId($consultation->getId())->setDateRdv($consultation->getDateRdv()->format("d-m-Y H:i:s"))
-            ->setPatient($consultation->getPatient()->getId())->setPracticien($consultation->getPracticien()->getNom());
+            ->setPatient($patientDto)->setPracticien($praticienDto);
         return $consultationDto;
     }
 }

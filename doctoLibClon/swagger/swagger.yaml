@@ -4,6 +4,30 @@ info:
   description: 'Praticien and Patient Management'
   version: V1
 paths:
+  '/patients/{username}':
+    get:
+      tags:
+        - patient
+      summary: 'Find one Patient'
+      description: 'Returns one Patient'
+      operationId: getCurrentUser
+      parameters:
+        -
+          name: username
+          in: path
+          description: 'Parameter with mutliple examples'
+          required: true
+      responses:
+        '200':
+          description: 'successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientDto'
+        '500':
+          description: 'Contact us, for this response'
+        '404':
+          description: 'Patients not found'
   /patients:
     get:
       tags:
@@ -179,6 +203,11 @@ paths:
       operationId: searchAllByIndex
       parameters:
         -
+          schema:
+            type: array
+            items:
+              type: object
+        -
           name: specialite
           in: query
           description: 'Status values that needed to be considered for filter'
@@ -217,6 +246,12 @@ paths:
       summary: 'creat praticien'
       description: 'creat praticien'
       operationId: creatPracticien
+      parameters:
+        -
+          schema:
+            type: object
+            items:
+              type: object
       responses:
         '200':
           description: 'successful operation'
@@ -233,6 +268,12 @@ paths:
       summary: 'creat practicien'
       description: 'creat practicien'
       operationId: creatPracticien
+      parameters:
+        -
+          schema:
+            type: PracticienDto
+            items:
+              type: object
       responses:
         '200':
           description: 'successful operation'
@@ -248,6 +289,12 @@ paths:
       summary: 'creat practicien'
       description: 'creat practicien'
       operationId: creatPracticien
+      parameters:
+        -
+          schema:
+            type: object
+            items:
+              type: object
       responses:
         '200':
           description: 'successful operation'
@@ -268,9 +315,18 @@ components:
         dateRdv:
           type: string
         patient:
-          type: integer
+          type: PatientDto
         practicien:
+          type: PracticienDto
+      type: object
+    ImageDto:
+      properties:
+        id:
           type: integer
+        nameFile:
+          type: string
+        name:
+          type: string
       type: object
     PatientDto:
       properties:
@@ -286,6 +342,8 @@ components:
           type: string
         adresse:
           type: integer
+        image:
+          type: array
       type: object
     PracticienDto:
       properties:

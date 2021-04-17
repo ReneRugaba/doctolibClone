@@ -2,8 +2,7 @@
 
 namespace App\DTO;
 
-use App\Entity\Patient;
-use App\Entity\Practicien;
+
 use OpenApi\Annotations as OA;
 
 /**
@@ -26,16 +25,16 @@ class ConsultationDto
     private $dateRdv;
 
     /**
-     * @OA\Property(type="int")
+     * @OA\Property(type="PatientDto")
      *
-     * @var int
+     * @var PatientDto|null
      */
     private $patient;
 
     /**
-     * @OA\Property(type="integer")
+     * @OA\Property(type="PracticienDto")
      *
-     * @var string|int
+     * @var PracticienDto|null
      */
     private $practicien;
 
@@ -52,7 +51,7 @@ class ConsultationDto
      *
      * @return  self
      */
-    public function setId(?int $id)
+    public function setId(?int $id):self
     {
         $this->id = $id;
 
@@ -82,7 +81,7 @@ class ConsultationDto
     /**
      * Get the value of patient
      */
-    public function getPatient(): ?int
+    public function getPatient(): ?PatientDto
     {
         return $this->patient;
     }
@@ -92,7 +91,7 @@ class ConsultationDto
      *
      * @return  self
      */
-    public function setPatient(?int $patient): ?self
+    public function setPatient(?PatientDto $patient): ?self
     {
         $this->patient = $patient;
 
@@ -102,7 +101,7 @@ class ConsultationDto
     /**
      * Get the value of practicien
      */
-    public function getPracticien(): ?string
+    public function getPracticien(): ?PracticienDto
     {
         return $this->practicien;
     }
@@ -112,7 +111,7 @@ class ConsultationDto
      *
      * @return  self
      */
-    public function setPracticien($practicien): ?self
+    public function setPracticien(?PracticienDto $practicien): ?self
     {
         $this->practicien = $practicien;
 

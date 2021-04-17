@@ -2,10 +2,7 @@
 
 namespace App\DTO;
 
-
-use DateTime;
-
-use App\Entity\Adresse;
+use App\DTO\AdresseDto;
 use OpenApi\Annotations as OA;
 
 /**
@@ -52,11 +49,18 @@ class PatientDto
     /**
      * @OA\Property(type="integer")
      *
-     * @var Adresse|null
+     * @var AdresseDto|null
      */
     private $adresse;
 
+    /**
+     * @OA\Property(type="array")
+     *
+     * @var array|null
+     */
+    private $image;
 
+    
     private $password;
 
     /**
@@ -143,7 +147,7 @@ class PatientDto
     /**
      * Get the value of adresse
      */
-    public function getAdresse(): ?Adresse
+    public function getAdresse(): ?AdresseDto
     {
         return $this->adresse;
     }
@@ -153,7 +157,7 @@ class PatientDto
      *
      * @return  self
      */
-    public function setAdresse(Adresse $adresse): ?self
+    public function setAdresse(AdresseDto $adresse): ?self
     {
         $this->adresse = $adresse;
 
@@ -197,6 +201,30 @@ class PatientDto
     public function setPassword(?string $password): ?self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of image
+     *
+     * @return  array|null
+     */ 
+    public function getImage():?array
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set the value of image
+     *
+     * @param  array|null  $image
+     *
+     * @return  self
+     */ 
+    public function setImage(?array $image):self
+    {
+        $this->image = $image;
 
         return $this;
     }

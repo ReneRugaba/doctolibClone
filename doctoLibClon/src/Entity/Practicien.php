@@ -50,15 +50,21 @@ class Practicien extends User
     private $consultation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Specialite::class, cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Specialite::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $specialite;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ImagesPraticien::class, mappedBy="praticien", orphanRemoval=true)
+     */
+    private $imagesPraticiens;
 
     public function __construct()
     {
         $this->Patient = new ArrayCollection();
         $this->consultation = new ArrayCollection();
+        $this->imagesPraticiens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +185,36 @@ class Practicien extends User
     public function setId(?int $id): ?self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ImagesPraticien[]
+     */
+    public function getImagesPraticiens(): Collection
+    {
+        return $this->imagesPraticiens;
+    }
+
+    public function addImagesPraticien(ImagesPraticien $imagesPraticien): self
+    {
+        if (!$this->imagesPraticiens->contains($imagesPraticien)) {
+            $this->imagesPraticiens[] = $imagesPraticien;
+            $imagesPraticien->setPraticien($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImagesPraticien(ImagesPraticien $imagesPraticien): self
+    {
+        if ($this->imagesPraticiens->removeElement($imagesPraticien)) {
+            // set the owning side to null (unless already changed)
+            if ($imagesPraticien->getPraticien() === $this) {
+                $imagesPraticien->setPraticien(null);
+            }
+        }
 
         return $this;
     }
